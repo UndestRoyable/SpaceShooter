@@ -10,9 +10,23 @@ public class Boundary
 public class PlayerController : MonoBehaviour 
 {
 	public float speed; // ship movement speed, available in unity
-	public float tilt;
+	public float tilt; // tilt factor
 	public Boundary boundary; //reference of the boundary class
 
+	public GameObject shot;
+	public Transform shotSpawn;
+	public float fireRate;
+
+	private float nextFire;
+
+	void Update()
+	{
+		if (Input.GetKey("space") && Time.time > nextFire) 
+		{
+			nextFire = Time.time + fireRate;
+			Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+		}
+	}
 	void FixedUpdate()
 	{
 		float moveHorizontal = Input.GetAxis ("Horizontal"); //gets user input
