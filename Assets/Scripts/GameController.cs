@@ -11,10 +11,37 @@ public class GameController : MonoBehaviour
 	public float startWait;//wait on game start so the player can get ready.
 	public float waveWait; //time to wait between the waves
 
+	public GUIText scoreText; // reference to GUIText component on the screen
+	private int score; //cotains current score, not visible in the inspector because of privacy
+	public GUIText restartText;
+	public GUIText gameOverText;
+
+	private bool gameOver;
+	private bool restart;
+
 	void Start()
 	{
+		gameOver = false;
+		restart = false;
+		restartText.text = ""; //Setting restart text to nothing in the beginning of the game
+		gameOverText.text = "";
+		score = 0;
+		UpdateScore (); //To display Score: {}
 		StartCoroutine(SpawnWaves ()); //Calls SpawnWaves function on the start of the game
 	}
+
+	void Update()
+	{
+		if (restart) 
+		{
+			if(Input.GetKeyDown (KeyCode.R))
+			{
+				Application.LoadLevel(Application.loadedLevel); /*loads the scene in the(),
+				in our case loadLevel. */ 
+			}
+		}
+	}
+
 	IEnumerator SpawnWaves() //using coroutine
 	{
 		yield return new WaitForSeconds(startWait);/*short pause in the beginning of the game, 
@@ -31,7 +58,31 @@ public class GameController : MonoBehaviour
 				yield return new WaitForSeconds(spawnWait); // Waits some time before throw new asteroid.
 			}
 			yield return new WaitForSeconds(waveWait);
+			if(gameOver)
+			{
+				restartText.text = "Press 'R' to Restart ;)";
+				restart = true;
+				break; //let's kill this infinite loop :3
+					
+			}
 		}
+	}
+
+	public void AddScore(int newScoreValue) // public - to be accesible by everywhere
+	{
+		score += newScoreValue;
+		UpdateScore ();
+	}
+
+	void UpdateScore()
+	{
+		scoreText.text = "Score: " + score; //Displays the current score 
+	}
+
+	public void GameOver()
+	{
+		gameOverText.text = "Shiiiet son, you're fuckin' dead!";
+		gameOver = true;
 	}
 
 }
