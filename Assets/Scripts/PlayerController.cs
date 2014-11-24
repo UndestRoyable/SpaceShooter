@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
 		{
 			nextFire = Time.time + fireRate;
 			Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+			audio.Play(); //plays the player_audio source every time we shoot
 		}
 	}
 	void FixedUpdate()
